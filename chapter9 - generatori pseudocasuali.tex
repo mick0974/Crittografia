@@ -270,7 +270,6 @@ Vediamo ora un algoritmo per la generazione di bit pseudocasuali basato sulla di
         \left|\underbrace{Pr[A(b_1 \ ... \ b_{l}) = b_{l+1}]}_{Pr[A \text{ corretto}]} - \frac{1}{2} \right| &= \left|P_{i+1} - P_i \right| \ge k^{-c}
     \end{align*}
 
-    \noindent Abbiamo dimostrato che 
 \end{proof}
 
 \section{Algoritmo di Blum Blum Shoup}
@@ -345,15 +344,36 @@ Algoritmo per la generazione di bit pseudocasuali basato sulla difficoltà del c
 
         \noindent Abbiamo usato one-time pad con una chiave che è pseudogenerata a partire da un seme scelto a caso. Questo protocollo è praticamente one-time pad. Noi sappiamo che se la sequenza $b_1 \ ... \ b_l$ è veramente casuale, allora il cyphertext non contiene alcuna informazione circa il plaintext (quindi il cyphertext costruito è completamente sicuro).
 
-        Supponiamo che qualcuno riesca a ottenere qualcosa dal cyphertext, che riesca a distinguere qualsiasi coppia di messaggi cifrata con questo sistema. Quel qualcuno che riesce a vedere se due cyphertext sono dello stesso messaggio o di messaggi diversi sappiamo che non lo riesce a fare in presenza di una chiave veramente casuale. Quel distinguisher per due messaggi del nostro crittosistema diventerebbe un distinguisher per un generatore di bit pseudocasuali: se sono veramente pseudocasuali $D$ non distingue, se i bit sono pseudocasuali si comporta in maniera diversa. Questa macchina diventa un distinguisher per Blum Blum Shoup, che soddisfa 
+        Supponiamo che qualcuno riesca a ottenere qualcosa dal cyphertext, che riesca a distinguere qualsiasi coppia di messaggi cifrata con questo sistema. Quel qualcuno che riesce a vedere se due cyphertext sono dello stesso messaggio o di messaggi diversi sappiamo che non lo riesce a fare in presenza di una chiave veramente casuale. Quel distinguisher per due messaggi del nostro crittosistema diventerebbe un distinguisher per un generatore di bit pseudocasuali: se sono veramente pseudocasuali $D$ non distingue, se i bit sono pseudocasuali si comporta in maniera diversa. Questa macchina diventa un distinguisher per Blum Blum Shoup, che soddisfa le proprietà di un generatore di bit pseudocasuali.
+
+        L'ultimo elemento del cyphertext ${x^2}^{(l+1)}$, agli occhi di chi non ha la chiave pubblica è un elemento casuale di $Z_n^*$. 
 \end{itemize}
 
+\noindent \textbf{Decryption}
+\begin{itemize}
+    \item Per ricavare $x^2$, conoscendo la fattorizzazione di $n$, calcoliamo le radici quadrate di ogni elemento (per i primi di Blum ne esiste solo una che è un quadrato). Esiste un algoritmo che calcola direttamente  $x^2$ da ${x^2}^{(l+1)}$ senza calcolare le radici intermedie;
+    \item Generiamo $b_1 \ ... \ b_l$ a partire da $x^2$;
+    \item Eseguiamo 
+    \begin{center}
+            \begin{tabular}{ c c c c c c c }
+              & $b_1$ & $b_2$ & $b_3$ & $...$ & $b_l$ & \\
+              $\bigoplus$ & $c_1$ & $c_2$ & $c_3$ & $...$ & $c_l$ & \\
+            \end{tabular}
+        \end{center}
 
+        Per ottenere $m_1 \ ... \ m_l$.
+\end{itemize}
 
+\noindent Questo sistema è dimostrabilmente sicuro in quanto riuscire a distinguere messaggi dal loro cyphertext equivale a distinguere la sequenza $b_1 \ ... \ b_l$ da una sequenza puramente casuale equivale ad avere un distinguisher per il sistema Blum Blum Shoup. 
 
-
-
-
+Il crittosistema è complesso quanto RSA: l'algoritmo calcola quadrati $l$ volte, dove il calcolo di ogni quadrato costa $k^2$. Quindi la complessità della codifica è
+\begin{align*}
+    \Theta(lk^2)
+\end{align*}
+\noindent RSA codifica a blocchi; codificando anche qui a blocchi di $k$ bit la complessità diventa 
+\begin{align*}
+    \Theta(lk^2) = \Theta(k \cdot k^2) = \Theta(k^3)
+\end{align*}
 
 
 

@@ -25,7 +25,7 @@ Siano \(p, q\) due numeri primi segreti di $k/2$ bit ciascuno e sia \(n = pq\) p
 \noindent Bob sceglie:
 \begin{itemize}
     \item $p, q$ primi segreti  di $k/2$ bit.
-    \item $y \in_R Z_n^*$ \underline{non quadrato} con $(\frac{a}{p}) = (\frac{a}{q}) = 1$.
+    \item $y \in_R Z_n^*$ \underline{non quadrato} con $(\frac{y}{p}) = (\frac{y}{q}) = 1$.
     \item Pubblica $n = pq$ e $y$.
 \end{itemize}
 
@@ -49,7 +49,7 @@ Siano \(p, q\) due numeri primi segreti di $k/2$ bit ciascuno e sia \(n = pq\) p
 \begin{align*}
     m = \begin{cases}
                 0 \pmod n & \text{ se } \left(\frac{c}{p} \right) = \left(\frac{c}{q} \right) = 1\\
-                1 \pmod n & \text{ se } \left(\frac{c}{p} \right) = \left(\frac{c}{p} \right) = -1
+                1 \pmod n & \text{ se } \left(\frac{c}{p} \right) = \left(\frac{c}{q} \right) = -1
         \end{cases}
 \end{align*}
 

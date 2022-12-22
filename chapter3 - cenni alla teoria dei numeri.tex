@@ -151,7 +151,7 @@ Sia $(G, *)$ un gruppo finito, e sia $g$ un elemento di $G$, allora se prendo la
 
 Se prendo tutte le potenze di $g$ ottengo un \textbf{sottogruppo} di $G$, che è un sottoinsieme dell'insieme $G$ che resta un gruppo. Se il sottogruppo che ottengo è l'intero gruppo $G$, allora $G$ è \textbf{ciclico} e $g$ è un \textbf{generatore} di $G$.
 
-\begin{theorem}
+\begin{theorem}[Teorema di Lagrange]
     Se $G'$ è un sottogruppo di $G$, allora $|G'| \bigg| |G|$, ovvero il numero di elementi di $G'$ è divisore del numero di elementi di $G$.
 \end{theorem}
 
@@ -191,7 +191,7 @@ Se prendo tutte le potenze di $g$ ottengo un \textbf{sottogruppo} di $G$, che è
         a^{p-1} \equiv 
         \begin{cases}
                 1 \pmod p & \text{ se } p \ne ka\\
-                0 \pmod p & \text{ se } p = ka
+                0 \pmod p & \text{ se } p \big| ka
         \end{cases}
     \end{align*}
 \end{theorem}
@@ -209,7 +209,8 @@ Se prendo tutte le potenze di $g$ ottengo un \textbf{sottogruppo} di $G$, che è
 \section{Numero quadrato}
 
 \begin{definition}
-Sia \(p\) un numero primo dispari e sia $a \in Z^*_p$. Si dice che \(a\) è un residuo quadratico di modulo \(p\) se \(a\) è un quadrato modulo \(p\), ovvero esiste un numero \(c\) tale che \(c \equiv a \pmod p\). In caso contrario \(a\) è detto non residuo quadratico modulo \(p\).
+Sia \(p\) un numero primo dispari e sia $a \in Z^*_p$. Si dice che \(a\) è un residuo quadratico di modulo \(p\) se \(a\) è un quadrato modulo \(p\), ovvero esiste un numero \(c\) tale che \[c^2 \equiv a \pmod p\]
+In caso contrario \(a\) è detto non residuo quadratico modulo \(p\).
 \end{definition}
 
 \noindent Dato $(G, *)$, un gruppo $G$ con l'operazione $*$, il numero di quadrati che contiene è esattamente uguale a $\frac{p-1}{2}$, ovvero a tutti e soli gli elementi $g^{2i}$ (elementi con esponente pari). Ogni elemento $g^{2i}$ ha due radici:
@@ -260,9 +261,9 @@ Praticamente il simbolo di Legendre permette di ottenere il bit meno significati
 \noindent Dato $n=pq$, come è possibile capire se un numero $a$ è un quadrato in $Z_n^*$? Il modo più semplice sarebbe fattorizzare $n$ in $p$ e $q$ e calcolare il simbolo si Legendre di $a$ rispetto ai due fattori. Poichè fattorizzare è difficile (non esistono algoritmi efficienti), allora anche determinare se $a \in Z_n^*$ dovrebbe essere difficile. In realtà non è proprio così. 
 
 Il simbolo di Jacobi, una generalizzazione del simbolo di Legendre, permette di determinare $\left(\frac{a}{n} \right)$ senza dover fattorizzare.
-\begin{definition}[Simbolo di Jacobi] Siano \(a\) e \(b\) due interi, con \(b\) dispari e positivo. Supponendo che la fattorizzazione di \(b\) in numeri primi sia 
+\begin{definition}[Simbolo di Jacobi] Siano \(a\) e \(n\) due interi, con \(n\) dispari e positivo. Supponendo che la fattorizzazione di \(n\) in numeri primi sia 
 \begin{align*}
-    b = p_1^{e_1} \cdot p_2^{e_2} \cdot ... \cdot p_t^{e_t}
+    n = p_1^{e_1} \cdot p_2^{e_2} \cdot ... \cdot p_t^{e_t}
 \end{align*}
 
 \noindent allora il simbolo di Jacobi \(\left(\frac{a}{n}\right)\) è definito dalla formula 
@@ -273,7 +274,7 @@ Il simbolo di Jacobi, una generalizzazione del simbolo di Legendre, permette di 
 
 \noindent Il simbolo di Jacobi $\left(\frac{a}{n}\right)$ gode delle seguenti proprietà:
 \begin{align*}
-    \left(\frac{a}{n_1n_2}\right) = \left(\frac{a}{n_1}\right)\left(\frac{a}{n_1}\right)
+    \left(\frac{a}{n_1n_2}\right) = \left(\frac{a}{n_1}\right)\left(\frac{a}{n_2}\right)
 \end{align*}
 \begin{align*}
         \left(\frac{a_1a_2}{n}\right) = \left(\frac{a_1}{n}\right)\left(\frac{a_2}{n}\right)
@@ -415,7 +416,7 @@ Sia $p$ un numero primo di grandi dimensioni. Allora esiste un generatore $g$ ta
 \noindent è una lista completa degli elementi di $Z_p^*$.
 
 \begin{definition}
-Sia \(g\) un generatore di $Z_p^*$ e sia $h$ un elemento non zero appartenente all'insieme. Il probema del logaritmo discreto $DLG$ è il problema di trovare un esponente $x$ tale per cui
+Sia \(g\) un generatore di $Z_p^*$ e sia $h$ un elemento non zero appartenente all'insieme. Il problema del logaritmo discreto $DLG$ è il problema di trovare un esponente $x$ tale per cui
 \begin{align*}
     g^x \equiv h \pmod p
 \end{align*}
@@ -439,8 +440,8 @@ Siano $x, y$ due radici del quadrato $a \in Z_n^*$ con $x \ne$ $\pm y \pmod n$. 
 \begin{proof}
 \begin{align*}
     &x^2 \equiv y^2\\
-    &x^2 - y^2 = 0\\
-    &(x+y)(x-y) = 0\\
+    &x^2 - y^2 \equiv 0\\
+    &(x+y)(x-y) \equiv 0\\
     &(x+y)(x-y) = kn \hspace{1cm} \text{il resto della divisione per $n$ è 0, quindi il prodotto è un multiplo di $n$}
 \end{align*}
 \noindent Si presentano tre casi:
@@ -462,7 +463,7 @@ Siano $x, y$ due radici del quadrato $a \in Z_n^*$ con $x \ne$ $\pm y \pmod n$. 
 \State $y \gets A(x^2)$
 \State $z \gets MCD(x+y, n)$
 \If{$z \ne n$}
-    \State \Return $n$
+    \State \Return $z$
 \Else
     \State \Return FATTORIZZA(n)
 \EndIf

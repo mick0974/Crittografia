@@ -94,8 +94,8 @@ Data la chiave pubblica $(n, e)$ e il messaggio $m$, la funzione di encryption �
     c = m^e \pmod n
 \end{align*}
 
-\noindent \textbf{Encryption}
-Data la chiave pubblica $(n, d)$ e il cyphertext $c$, la funzione di decryption è
+\noindent \textbf{Decryption}
+Data la chiave privata $(n, d)$ e il cyphertext $c$, la funzione di decryption è
 \begin{align*}
     m = c^d \pmod n
 \end{align*}
@@ -129,7 +129,7 @@ Se rimpiazziamo, nel \textit{Fermat’s little theorem}, il numero primo $p$ con
 \begin{align*}
     x^e \equiv c \pmod n
 \end{align*}
-\noindent dove le quantità note sono $e, c, n$ e la $x$ è sconosciuta. IN altre parole, RSA si affida all'assunzione che è difficile prendere radici e-esime modulo $n$. 
+\noindent dove le quantità note sono $e, c, n$ e la $x$ è sconosciuta. In altre parole, RSA si affida all'assunzione che è difficile prendere radici e-esime modulo $n$. 
 
 Se $n$ è primo, risulta che è relativamente facile calcolare la radice esima in modulo $n$, come mostrato di seguito.
 

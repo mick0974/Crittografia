@@ -1,2 +1,115 @@
 \chapter{Funzioni pseudocasuali}
-\label{chapter9}
+\label{chapter10}
+
+Vogliamo ora trovare un modo per evitare che nessuno possa modificare il messaggio. Possiamo usare sistemi crittografici non malleabili oppure possiamo aggiungere della ridondanza (codice ciclico, bit di parità). 
+
+Noi vogliamo però costruire dei sistemi che sono resistenti anche da chi tenta di modificare il messaggio in maniera controllata per far quadrare anche il codice di ridondanza. I codici ciclici di ridondanza vengono solitamente usati per proteggerci dall'errore di trasmissione dei dati, che è un errore casuale. 
+
+Vogliamo quindi accodare al messaggio un qualcosa che nessuno riesca a capire se non il reale destinatario finale. Se per esempio scegliessimo al messaggio una funzione casuale (da $k$ bit a $k$ bit) condiviso con l'altra parte, potremmo accodare al messaggio $f(m)$ come \textbf{autenticazione}. In questo modo chi non conosce la funzione casule, che vede solo bit casuali appesi al messaggio, non può modificare in l'autenticazione $f(m)$ del messaggio in modo corretto (lo indovina con probabilità $\frac{1}{2^k}$, con $k$ lunghezza dell'autenticazione).
+
+\section{Generazione di funzioni pseudocasuali}
+
+Sia $U_k$ l'insieme delle funzioni 
+\begin{align*}
+    U_k: \{0, 1\}^k \rightarrow  \{0, 1\}^k
+\end{align*}
+
+\noindent Vogliamo scegliere $f \in_R U_k$. Come facciamo? Generiamo una sequenza di bit pseudocasuali per generare l'indice di $f$ in una enumerazione di $\{0, 1\}^k \rightarrow  \{0, 1\}^k$. L'indice che generiamo è indistinguibile da un indice casuale, e quindi la funzione è come se fosse stata scelta casualmente. 
+
+Questa definizione ha però un problema: la cardinalità di un insieme di funzioni da $A$ a $B$ é $|B|^{|A|}$, quindi 
+\begin{align*}
+    |U_k| = (2^k)^{(2^k)}
+\end{align*}
+
+\noindent Se la cardinalità di questo insieme è $(2^k)^{(2^k)}$, quanti bit ci servono per denotare l'indice di una funzione? I bit che ci servono sono
+\begin{align*}
+    \log_2 |U_k| = k \cdot 2^k
+\end{align*}
+\noindent Ci servirebbe una quantità di bit esponenziale, e quindi un tempo esponenziale solo per generare gli indici. Noi vogliamo denotare una funzione usando $k$ bit. Dobbiamo lavorare con un insieme $F_k \subseteq U_k$. Le funzioni che andremo ad usare saranno quindi un sottoinsieme delle possibili funzioni. Vogliamo comunque sceglierle in modo tale che nessuno sia in grado di accorgersi che la funzione sia stata scelta da un insieme più piccolo. 
+
+\begin{definition}[Funzione pseudocasuale]
+    Sia $F_k \subseteq U_k$ tale per cui:
+    \begin{enumerate}
+        \item $|F_k| = 2^k$;
+        \item $\exists A \in PPT$ che calcola la seguente funzione:
+        \begin{align*}
+            i, x \rightarrow f_i(x)
+        \end{align*}
+        Ogni volta che vogliamo applicare la funzione i-esima all'input $x$,applichiamo un algoritmo polinomiale in grado di farlo;
+        \item Sia $D \in PPT$ una macchina che interroga $F$ e ritorna $\{0, 1\}$. Siano
+        \begin{itemize}
+            \item $P_k^{D, U}$ la probabilità che $D$ restituisca $1$ quando $f \in_R U_k$ (campionata casualmente dall'intero insieme $U_k$);
+            \item $P_k^{D, F}$ la probabilità che $D$ restituisca $1$ quando $f \in_R F_k$.
+        \end{itemize}
+        Allora
+        \begin{align*}
+            \left| P_k^{D, U} - P_K^{D, F} \right| < k^{-\omega(1)}
+        \end{align*}
+        Nessuno di coloro che conosce l'indice della funzione deve accorgersi che la funzione è generata (ovvero presa dall'insieme piccolissimo $F_k$).
+    \end{enumerate}
+\end{definition}
+
+\subsection{Funzione 1}
+Siano $G$ un PRSG (Pseudo Random Sequence Generator) e $i$ il seme. Allora il seguente sistema
+\begin{center}
+    \includegraphics[width=1\textwidth]{images/fun1.png}
+\end{center}
+\noindent su input $x$ genera $k$ bit, li memorizza e li restituisce. Su un successivo input $y$, se $y = x$ restituisce il risultato precedenti, altrimenti genera altri $k$ bit, li memorizza e li restituisce. In generale, dato un $x$ già usato, $G$ ritorna i $k$ bit associati.
+
+Questo è un generatore di bit pesudocasuali? Supponiamo che Alice e Bob vogliano scambiarsi dei messaggi autenticati ($m, f(m)$) con questo sistema. Entrambi conoscono il seme $i$ da passare al generatore di funzioni pseudocasuali. Se la comunicazione è sequenziale, come in figura \ref{fig:fun1-1}, il sistema funziona correttamente in quanto l'ordine in cui vengono generate le sequenze di $k$ bit è la stessa per Alice e Bob. 
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{images/fun1-1.png}
+    \caption{Alice invia un messaggio, Bob lo verifica, Bob risponde, Alice verifica la risposta.}
+    \label{fig:fun1-1}
+\end{figure}
+
+Se invece Alice e Bob inviano ciascuno un messaggio all'altro contemporaneamente, i messaggi non vengono autenticati \ref{fig:fun1-2}. Il sistema descritto associa la prima sequenza di bit al primo input passato, la seconda al secondo (se diverso da quello già memorizzato) e così via. Quindi il sistema di Bob assocerà la prima sequenza a $y$, mentre quello di Alice a $x$, rendendo così errata l'autenticazione. 
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{images/fun1-2.png}
+    \caption{Alice invia un messaggio, Bob invia un messaggio, Bob verifica, Alice verifica.}
+    \label{fig:fun1-2}
+\end{figure}
+
+\noindent Questo sistema potrebbe essere usato quando esiste un repository centralizzato. Inoltre, necessita di un database che mantenga tutte le richieste già effettuate; maggiore sono le entry, più tempo è necessario a ottenere una risposta dalle interrogazioni.
+
+Questo sistema non soddisfa la nostra definizione di funzioni pseudocasuali in quanto $F_k$ non è un insieme ben definito.
+
+\subsection{Funzione 2}
+Siano $G$ un PRSG (Pseudo Random Sequence Generator) e $i$ il seme. Dato il seguente sistema
+\begin{center}
+    \includegraphics[width=1\textwidth]{images/fun2.png}
+\end{center}
+
+\noindent dividiamo l'output di $G$ in tanti gruppi di $k$ bit ciascuno. Associo il primo gruppo a $f_0$, il secondo a $f_1$, il terzo a $f_3$ e così via. Allora 
+\begin{align*}
+    f_i(x) = \text{ x-esimo gruppo di $k$ bit restituito da $G$}
+\end{align*}
+
+\noindent Con questo sistema l'insieme $F_k$ è ben definito e la sua cardinalità è $|2^k|$. La seconda proprietà è verificata? No, non esiste alcun algoritmo $A \in PPT$ che soddisfi al proprietà.
+\begin{proof}
+    Sia $x$ una sequenza di $k$ bit a $1$, ovvero:
+    \begin{align*}
+       x = 1 \ .... \ 1 = 2^{k}-1
+    \end{align*}
+    \noindent Per calcolare $f_i(x)$, dobbiamo prendere il gruppo in posizione $2^k-1$. Per come è definito un generatore id bit pseudocasuali, per calcolare questo gruppo dobbiamo generare tutti i bit che vengono prima, che sono $k \cdot 2^k$ bit. Ci serve un tempo esponenziale.
+\end{proof}
+
+\subsection{Funzione 3}
+Siano $G$ un PRSG (Pseudo Random Sequence Generator) e $i \oplus x$ il seme. Dato il seguente sistema:
+\begin{center}
+    \includegraphics[width=0.5\textwidth]{images/fun3.png}
+\end{center}
+
+\noindent prendiamo solo i primi $k$ bit come risultato. Allora:
+\begin{align*}
+    f_i(x) = \text{ primo $k$ bit di $G$ con seme $i \oplus x$}
+\end{align*}
+
+\noindent Verifichiamo se rispetta le tre proprietà:
+\begin{enumerate}
+    \item L'insieme ha cardinalità $|2^k|$ e l'indice $i$ definisce in maniera univoca la funzione ($f_i(x)$ è ben definita);
+    \item La funzione $f_i(x)$ è calcolabile polinomialmente;
+    \item 
+\end{enumerate}
